@@ -18,7 +18,7 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('execution');
-            $table->string('status');
+            $table->string('status')->default('established');
             $table->foreignId('creator')->constrained('users');
             $table->foreignId('responsible_person')->constrained('users');
             $table->date('expiration_date');

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('surname');
             $table->string('patronymic');
             $table->string('password');
-            $table->boolean('admin')->default(false);
+            $table->bigInteger('supervisor')->unsigned()->nullable();
             $table->timestamps();
         });
     }
