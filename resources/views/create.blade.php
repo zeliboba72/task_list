@@ -52,10 +52,9 @@
                     <label for="input-date" class="form-label">Крайний срок:</label>
                     <input name="expiration_date" type="date" class="form-control" id="input-date" required>
                 </div>
-                @if(Auth::user())
-                    <input type="hidden" value="{{ Auth::user()->id }}">
-                @endif
-                <input type="hidden" value="1" name="creator" required>
+                @auth
+                    <input type="hidden" value="{{ auth()->user->id }}" required>
+                @endauth
                 <input type="submit" class="btn btn-primary" value="Создать">
                 <a href="{{ route('tasks.index') }}" class="btn btn-outline-danger">Отмена</a>
             </form>
