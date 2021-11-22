@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +16,13 @@ use App\Http\Controllers\TaskController;
 |
 */
 
-Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+Route::get('/', [TaskController::class, 'index'])->name('tasks.index')->middleware('auth');
+Route::get('create', [TaskController::class, 'create'])->name('tasks.create')->middleware('auth');
+Route::post('/', [TaskController::class, 'store'])->name('tasks.store')->middleware('auth');
+
+Route::get('register', [RegisterController::class, 'create'])->name('register.create')->middleware('guest');
+Route::post('register', [RegisterController::class, 'store'])->name('register.store')->middleware('guest');
+
+Route::get('auth', [LoginController::class, 'create'])->name('auth.create')->middleware('guest');
+Route::post('auth', [LoginController::class, 'store'])->name('auth.store')->middleware('guest');
+Route::post('auth/logout', [LoginController::class, 'destroy'])->name('auth.destroy')->middleware('auth');
