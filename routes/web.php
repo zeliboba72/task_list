@@ -19,6 +19,8 @@ use App\Http\Controllers\LoginController;
 Route::get('/', [TaskController::class, 'index'])->name('tasks.index')->middleware('auth');
 Route::get('create', [TaskController::class, 'create'])->name('tasks.create')->middleware('auth');
 Route::post('/', [TaskController::class, 'store'])->name('tasks.store')->middleware('auth');
+Route::get('edit/{id}', [TaskController::class, 'edit'])->name('tasks.edit')->middleware('auth');
+Route::patch('edit/{id}', [TaskController::class, 'update'])->name('tasks.update')->middleware('auth');
 
 Route::get('register', [RegisterController::class, 'create'])->name('register.create')->middleware('guest');
 Route::post('register', [RegisterController::class, 'store'])->name('register.store')->middleware('guest');

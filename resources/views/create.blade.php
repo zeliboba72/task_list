@@ -41,20 +41,21 @@
                             aria-label="responsible-person-select"
                             required
                     >
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('responsible_person') == $user->id ? 'selected' : '' }}>
-                                {{ $user->surname }} {{ $user->name }} {{ $user->patronymic }}
-                            </option>
-                        @endforeach
+                        <option value="{{ auth()->user()->id }}">Назначить меня</option>
+                        @if($users && $users->count())
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ old('responsible_person') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->surname }} {{ $user->name }} {{ $user->patronymic }}
+                                </option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="input-date" class="form-label">Крайний срок:</label>
                     <input name="expiration_date" type="date" class="form-control" id="input-date" required>
                 </div>
-                @auth
-                    <input type="hidden" value="{{ auth()->user()->id }}" required>
-                @endauth
+                <input name="creator" type="hidden" value="{{ auth()->user()->id }}" required>
                 <input type="submit" class="btn btn-primary" value="Создать">
                 <a href="{{ route('tasks.index') }}" class="btn btn-outline-danger">Отмена</a>
             </form>
