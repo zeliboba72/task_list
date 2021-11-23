@@ -1,12 +1,15 @@
 @extends('layouts.app')
-@section('browser-title', 'Главная')
+@section('browser-title', 'Все задачи')
 @section('content')
     <div class="p-4">
         <div class="d-flex justify-content-between mb-3">
-            <h1 class="mb-3">Задачи</h1>
+            <div>
+                <h1 class="mb-3">Задачи</h1>
+                <a href="{{ route('tasks.create') }}" class="btn btn-primary">Новая задача</a>
+            </div>
             <form method="GET" class="border p-3 border-primary rounded" style="max-width: 50%;">
                 <div class="d-flex justify-content-start mb-3">
-                    <div class="me-3">
+                    <div>
                         <label class="mb-1" for="date-select">Крайний срок:</label>
                         <select name="date"
                                 class="form-select form-select-sm border-primary"
@@ -23,23 +26,26 @@
                                 Неделя
                             </option>
                             <option
-                                value="{{ today()->addYear()->toDateString() }}"
+                                value="{{ today()->addMonth()->toDateString() }}"
                             >
-                                Больше
+                                Месяц
                             </option>
                         </select>
                     </div>
-                    <div>
-                        <label class="mb-1" for="peron-select">Ответственный:</label>
-                        <select name="person"
-                                class="form-select form-select-sm border-primary"
-                                id="peron-select"
-                                aria-label=".form-select-sm">
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    @if($users && $users->count())
+                        <div>
+                            <label class="mb-1" for="peron-select">Ответственный:</label>
+                            <select name="person"
+                                    class="form-select form-select-sm border-primary"
+                                    id="peron-select"
+                                    aria-label=".form-select-sm"
+                            >
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                    @endif
                 </div>
                 <input type="submit" class="btn btn-outline-primary" value="Отфильтровать">
             </form>
@@ -62,6 +68,16 @@
                     <div class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>
+                                @if($task->creator == auth()->user()->id)
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
+                                        Отредактировать задачу
+                                    </a>
+                                @endif
+                                @if($task->creator == auth()->user()->supervisor && $task->responsible_person == auth()->user()->id)
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
+                                        Изменить статус
+                                    </a>
+                                @endif
                                 <h4>{{ $task->title }}</h4>
                                 <p class="m-0">Ответственный:
                                     <span class="text-muted">
