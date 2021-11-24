@@ -1,23 +1,37 @@
 <?php
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
-if (!function_exists('checkDateFormat')) {
-    function checkDateFormat($date) {
-        if (!preg_match('/\d{4}-\d{2}-\d{2}/', $date)) {
-            return false;
+if (!function_exists('getHtmlForExecution')) {
+    function getHtmlForExecution($execution) {
+        switch ($execution) {
+            case("low"):
+                echo '<span class="text-success">' . 'Низкий' . '</span>';
+                break;
+            case("medium"):
+                echo '<span class="text-warning">' . 'Средний' . '</span>';
+                break;
+            case("high"):
+                echo '<span class="text-danger">' . 'Высокий' . '</span>';
+                break;
         }
-        $arDate = explode('-', $date);
-        $year = $arDate[0];
-        $month = $arDate[1];
-        $day = $arDate[2];
-        return checkdate($month, $day, $year);
     }
 }
 
-if (!function_exists('getSubordinatesForCurrentUser')) {
-    function getSubordinatesForCurrentUser() {
-        $currentId = Auth::user()->id;
-        return User::where('supervisor', '=', $currentId)->get();
+if (!function_exists('getHtmlForStatus')) {
+    function getHtmlForStatus($status) {
+        switch ($status) {
+            case("established"):
+                echo 'К выполнению';
+                break;
+            case("performed"):
+                echo '<span class="text-primary">' . 'Выполняется' . '</span>';
+                break;
+            case("completed"):
+                echo '<span class="text-success">' . 'Выполнена' . '</span>';
+                break;
+            case("canceled"):
+                echo '<span class="text-danger">' . 'Отменена' . '</span>';
+                break;
+        }
     }
 }
