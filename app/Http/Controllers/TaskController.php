@@ -10,53 +10,31 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $users = getSubordinatesForCurrentUser();
-        $filters = collect();
-
-        if ($request->get('date')) {
-            if (checkDateFormat($request->get('date'))) {
-                $tasksQuery = Task::whereDate('expiration_date', '<=', $request->get('date'));
-                $filters->put("date", $request->get('date'));
-            }
-        }
-
-        if ($request->get('person') && is_numeric($request->get('person'))) {
-            if (isset($tasksQuery)) {
-                $tasksQuery->where('responsible_person', '=', $request->get('person'));
-            } else {
-                $tasksQuery = Task::where('responsible_person', '=', $request->get('person'));
-            }
-            $filterUser = $users->firstWhere("id", $request->get('person'));
-            if ($filterUser) {
-                $filters->put('person', $filterUser->surname . " " . $filterUser->name . " " . $filterUser->patronymic);
-            }
-        }
-
-        if (isset($tasksQuery)) {
-            $tasksQuery->orderBy('updated_at', 'asc')
-                ->join('users', 'tasks.responsible_person', '=', 'users.id')
-                ->select('tasks.*',
-                    'users.name as user_name',
-                    'users.surname as user_surname',
-                    'users.patronymic as user_patronymic');
+        if ($request->filled('date')) {
+            $tasks = Task::filterDate($request->get('date'))
+                ->orderBy('updated_at', 'desc');
+        } elseif ($request->filled('person')) {
+            $tasks = Task::filterByUser($request->get('person'))
+                ->orderBy('updated_at', 'desc');
         } else {
-            $tasksQuery = Task::orderBy('updated_at', 'asc')
-                ->join('users', 'tasks.responsible_person', '=', 'users.id')
-                ->select('tasks.*',
-                    'users.name as user_name',
-                    'users.surname as user_surname',
-                    'users.patronymic as user_patronymic');
+            $tasks = Task::orderBy('updated_at', 'desc');
         }
 
-        $tasks = $tasksQuery->get();
-
-        return view('index', compact('tasks', 'users', 'filters'));
+        $tasks = $tasks->join('users', 'tasks.responsible_person', '=', 'users.id')
+              ->select('tasks.*',
+                    'users.name as user_name',
+                    'users.surname as user_surname',
+                    'users.patronymic as user_patronymic')
+              ->orderBy('updated_at', 'asc')
+              ->get();
+        $subordinates = User::subordinates(auth()->user()->id)->get();
+        return view('index', compact('tasks', 'subordinates'));
     }
 
     public function create()
     {
-        $users = User::where('supervisor', '=', auth()->user()->id)->get();
-        return view('create', compact('users'));
+        $subordinates = User::subordinates(auth()->user()->id)->get();
+        return view('create', compact('subordinates'));
     }
 
     public function store(Request $request)
