@@ -42,10 +42,10 @@
                             required
                     >
                         <option value="{{ auth()->user()->id }}">Назначить меня</option>
-                        @if($users && $users->count())
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('responsible_person') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->surname }} {{ $user->name }} {{ $user->patronymic }}
+                        @if($subordinates && $subordinates->count())
+                            @foreach($subordinates as $subordinate)
+                                <option value="{{ $subordinate->id }}" {{ old('responsible_person') == $subordinate->id ? 'selected' : '' }}>
+                                    {{ $subordinate->surname }} {{ $subordinate->name }} {{ $subordinate->patronymic }}
                                 </option>
                             @endforeach
                         @endif
