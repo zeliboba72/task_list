@@ -101,4 +101,15 @@ class TaskController extends Controller
         $task->save();
         return redirect()->route('tasks.index');
     }
+
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+
+        if (auth()->user()->id == $task->creator) {
+            $task->delete();
+        }
+
+        return redirect()->route('tasks.index');
+    }
 }

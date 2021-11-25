@@ -57,13 +57,20 @@
             @if($tasks && $tasks->count())
                 @foreach($tasks as $task)
                     <div class="card mb-3">
-                        <div class="card-header d-flex flex-column-reverse flex-md-row
+                        <div class="card-header d-flex flex-column flex-md-row
                          justify-content-between align-items-start align-items-md-center">
                             <div>
                                 @if($task->creator == auth()->user()->id)
-                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
-                                        Отредактировать задачу
-                                    </a>
+                                    <div class="d-flex flex-column align-items-start">
+                                        <form method="POST" action="{{ route('tasks.destroy', $task->id) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <input type="submit" class="btn btn-outline-danger" value="Удалить задачу">
+                                        </form>
+                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
+                                            Отредактировать задачу
+                                        </a>
+                                    </div>
                                 @elseif($task->creator == auth()->user()->supervisor && $task->responsible_person == auth()->user()->id)
                                     <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
                                         Изменить статус
