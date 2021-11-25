@@ -8,7 +8,7 @@
                     <a href="{{ route('auth.create') }}" class="btn btn-outline-light">Войти</a>
                 @endguest
                 @auth
-                    <span class="text-light me-2">
+                    <span class="text-light me-2 d-none d-sm-inline">
                         <strong>
                             {{ auth()->user()->surname }} {{ auth()->user()->name }} {{ auth()->user()->patronymic }}
                         </strong>

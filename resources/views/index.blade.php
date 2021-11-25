@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('browser-title', 'Все задачи')
 @section('content')
-    <div class="p-4">
-        <div class="d-flex justify-content-between mb-3">
+    <div class="p-1 p-md-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
             <div>
-                <h1 class="mb-3 text-danger">Задачи</h1>
+                <h1 class="mb-3">Задачи</h1>
                 <a href="{{ route('tasks.create') }}" class="btn btn-primary">Новая задача</a>
             </div>
-            <div class="d-flex justify-content-end">
+            <div class="d-flex flex-column flex-md-row justify-content-end mt-2 mt-sm-0">
                 @if($subordinates && $subordinates->count())
-                    <form method="GET" class="border p-3 border-primary rounded me-2">
+                    <form method="GET" class="border p-3 border-primary rounded me-md-2 me-0 mb-md-0 mb-2">
                         <div class="d-flex mb-2">
                             <div class="flex-grow-1">
                                 <label class="mb-1" for="person-select">Мои подчиненные:</label>
@@ -57,7 +57,8 @@
             @if($tasks && $tasks->count())
                 @foreach($tasks as $task)
                     <div class="card mb-3">
-                        <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-header d-flex flex-column-reverse flex-md-row
+                         justify-content-between align-items-start align-items-md-center">
                             <div>
                                 @if($task->creator == auth()->user()->id)
                                     <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-outline-warning mt-2 mb-2">
@@ -87,7 +88,7 @@
                         </div>
                         <div class="card-body">
                             <p class="card-text">{{ $task->description }}</p>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between">
                                 <p class="m-0 text-muted">Дата окончания: {{ $task->expiration_date }}</p>
                                 <p class="m-0 text-muted">Приоритет: {{ getHtmlForExecution($task->execution) }}</p>
                             </div>

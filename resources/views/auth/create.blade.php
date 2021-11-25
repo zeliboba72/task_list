@@ -2,7 +2,7 @@
 @section('browser-title', 'Вход')
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-5">
+        <div class="col-12 col-md-8 col-xl-5">
             <h1 class="mt-4 mb-4">Вход</h1>
             <form method="POST" action="{{ route('auth.store') }}" class="border rounded p-4">
                 @csrf
