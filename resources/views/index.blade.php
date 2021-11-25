@@ -4,7 +4,7 @@
     <div class="p-4">
         <div class="d-flex justify-content-between mb-3">
             <div>
-                <h1 class="mb-3">Задачи</h1>
+                <h1 class="mb-3 text-danger">Задачи</h1>
                 <a href="{{ route('tasks.create') }}" class="btn btn-primary">Новая задача</a>
             </div>
             <div class="d-flex justify-content-end">
